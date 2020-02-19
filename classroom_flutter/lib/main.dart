@@ -1,9 +1,10 @@
+import 'package:classroom_flutter/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-void main() => runApp(Cursos());
+void main() => runApp(Splash());
 
 class Cursos extends StatefulWidget {
   @override
@@ -43,6 +44,7 @@ class CursosForm extends State<Cursos> {
     // TODO: implement build
     //getCursos();
     return MaterialApp(
+     
       home:Scaffold(
         appBar: AppBar(
           title: Text("Cursos"),
