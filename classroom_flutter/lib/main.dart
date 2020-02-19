@@ -23,7 +23,7 @@ class CursosForm extends State<Cursos> {
     });
 
     var response =  await http.get(
-      Uri.encodeFull("http://localhost:8888/course"),
+      Uri.encodeFull("http://192.168.43.101:8888/course"),
       headers: { "Accept" : "application/json"}
     );
 
@@ -34,8 +34,14 @@ class CursosForm extends State<Cursos> {
   }
 
   @override
+  void initState(){
+    getCursos();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    //getCursos();
     return MaterialApp(
       home:Scaffold(
         appBar: AppBar(
@@ -71,14 +77,14 @@ class CursosForm extends State<Cursos> {
                           ),
                         
                           title: Text(
-                              dataCursos[index]['description'],
+                              dataCursos[index]['name'],
                               style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                           ),
 
                           subtitle: Row(
                             children: <Widget>[
                               //Icon(Icons.touch_app, color: Colors.yellowAccent),
-                              Text(dataCursos[index]['id'], style: TextStyle(color: Colors.black))
+                              Text(dataCursos[index]['description'], style: TextStyle(color: Colors.black))
                             ],
                           ),
 
