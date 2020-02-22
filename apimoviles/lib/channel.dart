@@ -27,7 +27,7 @@ class ApimovilesChannel extends ApplicationChannel {
     logger.onRecord.listen((rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
 
     final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
-    final persistenStore = PostgreSQLPersistentStore.fromConnectionInfo("postgres", "admin", "192.168.43.52", 5432, "classroom_moviles");
+    final persistenStore = PostgreSQLPersistentStore.fromConnectionInfo("postgres", "admin", "192.168.1.65", 5432, "classroom_moviles");//ip del servidor
     context = ManagedContext(dataModel,persistenStore);
   }
 

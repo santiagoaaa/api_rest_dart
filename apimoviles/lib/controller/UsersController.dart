@@ -45,4 +45,7 @@ class UsersController extends ResourceController {
     final delUsuario = await queryUsuario.delete();
     return Response.ok(delUsuario);
   }
+
+  /*prueba*/
+  
 }
