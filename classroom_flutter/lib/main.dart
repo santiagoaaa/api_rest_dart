@@ -1,3 +1,4 @@
+import 'package:classroom_flutter/dashboard.dart';
 import 'package:classroom_flutter/cursos.dart';
 import 'package:classroom_flutter/login.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class SplashForm extends State<Splash>{
     return MaterialApp(
        routes: {
         '/login' :(context)=>Login(),
-        //'/splash':(context)=>Dashboard(),
+        '/dash':(context)=>Dashboard(),
         '/course':(context)=>Cursos(),
         
       },

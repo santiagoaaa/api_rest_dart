@@ -58,12 +58,15 @@ class Login extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
+          Navigator.pushReplacementNamed(context, '/dash');
+          /*
           var codigo = await validateUser();
           //print(codigo);
           if( codigo == 200 ){
             //Navigator.push(context, MaterialPageRoute(builder:(context)=>Dashboard()));
-            Navigator.pushReplacementNamed(context, '/course');
+            Navigator.pushReplacementNamed(context, '/dash');
           }else{
+             Navigator.pushReplacementNamed(context, '/dash');
             showDialog(
               context: context,
               builder: (BuildContext context){
@@ -81,7 +84,7 @@ class Login extends StatelessWidget {
                 );
               }
             );
-          }
+          }*/
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlue,
