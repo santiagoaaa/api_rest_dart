@@ -16,6 +16,8 @@ class CursosForm extends State<Cursos> {
   List dataCursos;
   var isloading = false;
 
+  TextEditingController txtName = TextEditingController();
+  TextEditingController txtDesc = TextEditingController();
   
   Future <String> getCursos() async{
     this.setState((){
@@ -38,6 +40,31 @@ class CursosForm extends State<Cursos> {
     getCursos();
   }
 
+
+  Future <int> insCurso() async{
+    this.setState((){
+      isloading = true;
+    });
+
+    var name = txtName.text;
+    var desc = txtDesc.text;
+
+    Map<String, String> headers  = {"Content-type":"application/json"};
+    String cadJson = '{"name":"$name", "description":"$desc","idteacher":{"id":3}}';
+
+    var response = await http.post(
+      Uri.encodeFull("http://192.168.1.71:8888/course"),
+      headers: headers,
+      body: cadJson
+    );
+
+    var response2 = await http.get(
+      Uri.encodeFull("http://192.168.1.71:8888/course"),
+      headers: {"Accept":"application/json"}
+    );
+
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -52,6 +79,41 @@ class CursosForm extends State<Cursos> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add_circle),
           onPressed: (){
+            showDialog(
+              context: context,
+              builder: (BuildContext context){
+                return AlertDialog(
+                  title: Text("Nuevo curso"),
+                  content: Form(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        TextField(
+                          controller: txtName,
+                          decoration: InputDecoration(hintText: 'Nombre del curso'),
+                        ),
+                        TextField(
+                          controller: txtDesc,
+                          decoration: InputDecoration(hintText: 'Descripcion del curso'),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          child: RaisedButton(
+                            child: Text("Guardar curso"),
+                            onPressed: (){
+                              //Mas acciones
+                              var code = insCurso();
+                              Navigator.pop(context);
+                              
+                            },
+                          ),
+                        )
+                      ],
+                    )
+                  ),
+                );
+              }
+            );
             //codigo del boton
           },
         ),

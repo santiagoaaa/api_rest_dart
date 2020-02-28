@@ -22,6 +22,5 @@ class tblCourse {
 //Constraint
   ManagedSet <Schedule> fkidcourse;
   ManagedSet <Activities> fk2idcourse;
-
   ManagedSet <Advertisement> fk3idcourse;
 }

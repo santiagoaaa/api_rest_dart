@@ -14,7 +14,7 @@ class Login extends StatelessWidget {
       
       http.Response response = await http
       .get(
-        Uri.encodeFull("http://192.168.1.71:8888/users/$usr/$pwd"),
+        Uri.encodeFull("http://192.168.1.71:8888/users/"),
         headers: { "Accept" : "application/json"}
       );
 

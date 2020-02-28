@@ -19,12 +19,14 @@ class Migration1 extends Migration {
 		database.addColumn("tblCommentActivity", SchemaColumn.relationship("idstudent", ManagedPropertyType.bigInteger, relatedTableName: "tblUsers", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: true));
 		database.addColumn("tblCommentAdvertisement", SchemaColumn.relationship("idadvertisement", ManagedPropertyType.bigInteger, relatedTableName: "tblAdvertisement", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: true));
 		database.addColumn("tblCommentAdvertisement", SchemaColumn.relationship("idstudent", ManagedPropertyType.bigInteger, relatedTableName: "tblUsers", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: true));
-		database.addColumn("tblCourse", SchemaColumn.relationship("idteacher", ManagedPropertyType.bigInteger, relatedTableName: "tblUsers", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: true));
+
+		database.addColumn("tblCourse", SchemaColumn.relationship("idteacher", ManagedPropertyType.bigInteger, relatedTableName: "tblUsers", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: false));
+
 		database.addColumn("tblDelivery", SchemaColumn.relationship("idstudent", ManagedPropertyType.bigInteger, relatedTableName: "tblUsers", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: true));
 		database.addColumn("tblDelivery", SchemaColumn.relationship("idactiviti", ManagedPropertyType.bigInteger, relatedTableName: "tblActivities", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: true));
-		database.addColumn("tblShedule", SchemaColumn.relationship("idcourse", ManagedPropertyType.bigInteger, relatedTableName: "tblCourse", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: true));
+		database.addColumn("tblShedule", SchemaColumn.relationship("idcourse", ManagedPropertyType.bigInteger, relatedTableName: "tblCourse", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: false));
 		database.addColumn("tblShedule", SchemaColumn.relationship("idstudent", ManagedPropertyType.bigInteger, relatedTableName: "tblUsers", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: true));
-		database.addColumn("tblUsers", SchemaColumn.relationship("idType", ManagedPropertyType.bigInteger, relatedTableName: "tblUserType", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: true));
+		database.addColumn("tblUsers", SchemaColumn.relationship("idType", ManagedPropertyType.bigInteger, relatedTableName: "tblUserType", relatedColumnName: "id", rule: DeleteRule.nullify, isNullable: true, isUnique: false));
   }
   
   @override
