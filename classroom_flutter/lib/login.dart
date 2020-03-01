@@ -1,24 +1,50 @@
+import 'package:classroom_flutter/MisPreferencias.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return LoginState();
+  }
+
+}
+
+
+class LoginState extends State<Login> {
+  MisPreferencias _misPreferencias = MisPreferencias();
+  
+  final txtUserController = TextEditingController();
+  final txtPwdController = TextEditingController();
+  bool checkValue = false;
+
+
+  @override
+  void initState(){
+    super.initState();
+    _misPreferencias.init().then((value){
+      setState(() {
+        _misPreferencias = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    final txtUserController = TextEditingController();
-    final txtPwdController = TextEditingController();
-     
       Future<int> validateUser() async{
       var usr = txtUserController.text;
       var pwd = txtPwdController.text;
       
       http.Response response = await http
       .get(
-        Uri.encodeFull("http://192.168.1.71:8888/users/"),
+        Uri.encodeFull("http://192.168.1.71:8888/users/$usr/$pwd"),
         headers: { "Accept" : "application/json"}
       );
 
-      var token = response.body; // Obtener el token de la peticion o el error
+      //var token = response.body; // Obtener el token de la peticion o el error
       return response.statusCode;
     }
 
@@ -51,6 +77,24 @@ class Login extends StatelessWidget {
       ),
     );   
 
+    final chBox =  Checkbox(
+      value: _misPreferencias.estatus, 
+      onChanged: (value){
+        print(value);
+        print("---");
+        setState((){
+          //manda el value del estatus, pero sin guardar
+          _misPreferencias.estatus = value;
+          checkValue = value;
+          print(checkValue);
+          //_misPreferencias.commit();
+        });
+      },
+     // title: new Text("Matener sesión iniciada"),
+      activeColor: Colors.green,
+    );
+
+
       final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
@@ -58,15 +102,22 @@ class Login extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          Navigator.pushReplacementNamed(context, '/dash');
-          /*
+          //Navigator.pushReplacementNamed(context, '/dash');
+          
           var codigo = await validateUser();
           //print(codigo);
           if( codigo == 200 ){
             //Navigator.push(context, MaterialPageRoute(builder:(context)=>Dashboard()));
+            _misPreferencias.commit();
             Navigator.pushReplacementNamed(context, '/dash');
+
           }else{
-             Navigator.pushReplacementNamed(context, '/dash');
+            //insCheckValue();
+            print("entra a else de login");
+            print(_misPreferencias.estatus);
+            _misPreferencias.commit();
+            Navigator.pushReplacementNamed(context, '/dash');
+             /*
             showDialog(
               context: context,
               builder: (BuildContext context){
@@ -83,8 +134,8 @@ class Login extends StatelessWidget {
                   ],
                 );
               }
-            );
-          }*/
+            );*/
+          }
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlue,
@@ -106,7 +157,13 @@ class Login extends StatelessWidget {
               SizedBox(height: 30),
               txtPwd,
               SizedBox(height: 30),
-              loginButton
+              loginButton,
+              SizedBox(height: 15),
+              new Text('Mantener sesión iniciada', textAlign:TextAlign.center,),
+              chBox,
+  
+              
+              
             ],
           ),
         ),

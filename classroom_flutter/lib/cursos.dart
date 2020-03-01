@@ -15,7 +15,6 @@ class Cursos extends StatefulWidget {
 class CursosForm extends State<Cursos> {
   List dataCursos;
   var isloading = false;
-
   TextEditingController txtName = TextEditingController();
   TextEditingController txtDesc = TextEditingController();
   
