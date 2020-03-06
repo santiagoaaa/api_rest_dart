@@ -7,6 +7,8 @@ import 'package:apimoviles/controller/DeliveryController.dart';
 import 'package:apimoviles/controller/ScheduleController.dart';
 import 'package:apimoviles/controller/UserTypeController.dart';
 import 'package:apimoviles/controller/UsersController.dart';
+import 'package:apimoviles/model/Users.dart';
+import 'package:aqueduct/managed_auth.dart';
 
 import 'apimoviles.dart';
 
@@ -15,7 +17,8 @@ import 'apimoviles.dart';
 /// Override methods in this class to set up routes and initialize services like
 /// database connections. See http://aqueduct.io/docs/http/channel/.
 class ApimovilesChannel extends ApplicationChannel {
-  ManagedContext context;
+  ManagedContext context; //conexion de la bd y pantallas
+  AuthServer authServer; //referencia a oauht2.0
   /// Initialize services in this method.
   ///
   /// Implement this method to initialize services, read values from [options]
@@ -27,8 +30,11 @@ class ApimovilesChannel extends ApplicationChannel {
     logger.onRecord.listen((rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
 
     final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
-    final persistenStore = PostgreSQLPersistentStore.fromConnectionInfo("postgres", "admin", "192.168.1.72", 5432, "classroom_moviles");//ip del servidor
+    final persistenStore = PostgreSQLPersistentStore.fromConnectionInfo("postgres", "admin", "172.20.5.46", 5432, "classroom_moviles");//ip del servidor
     context = ManagedContext(dataModel,persistenStore);
+
+    final authStorage = ManagedAuthDelegate<Users>(context);
+    authServer = AuthServer(authStorage);
   }
 
   /// Construct the request channel.
@@ -45,7 +51,7 @@ class ApimovilesChannel extends ApplicationChannel {
     // See: https://aqueduct.io/docs/http/request_controller/
 
        router.route("/usertype[/:idTipoUsuario]").link( () => UserTypeController(context) );
-       router.route("/users[/:idUsuario]").link( () => UsersController(context) );
+       router.route("/users[/:idUsuario]").link( () => UsersController(context, authServer) );
        router.route("/shedule[/:idPrograma]").link( () => ScheduleController(context) );
        router.route("/delivery[/:idEnvio]").link( () => DeliveryController(context) );
        router.route("/course[/:idCurso]").link( () => CourseController(context) );

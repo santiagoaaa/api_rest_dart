@@ -5,19 +5,22 @@ import 'package:apimoviles/model/Delivery.dart';
 import 'package:apimoviles/model/Schedule.dart';
 import 'package:apimoviles/model/UserType.dart';
 import 'package:apimoviles/model/Course.dart';
+import 'package:aqueduct/managed_auth.dart';
 
-class Users extends ManagedObject <tblUsers> implements tblUsers {
-  
+class Users extends ManagedObject <tblUsers> implements tblUsers, ManagedAuthResourceOwner<tblUsers> {
+  @Serialize (input: true, output:false)
+  String password;
+
 }
 
-class tblUsers {
-  @primaryKey
-  int id;
+class tblUsers extends ResourceOwnerTableDefinition  {
+  //@primaryKey
+  //int id;
 
   String name;
   String lastName; 
   DateTime birDate; 
-  String password; 
+  //String password; 
 
   @Column(unique: true)
   String email; 

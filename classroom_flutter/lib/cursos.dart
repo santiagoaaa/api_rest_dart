@@ -24,7 +24,7 @@ class CursosForm extends State<Cursos> {
     });
 
     var response =  await http.get(
-      Uri.encodeFull("http://192.168.1.71:8888/course"),
+      Uri.encodeFull("http://10.188.105.219:8888/course"),
       headers: { "Accept" : "application/json"}
     );
 
@@ -52,13 +52,13 @@ class CursosForm extends State<Cursos> {
     String cadJson = '{"name":"$name", "description":"$desc","idteacher":{"id":3}}';
 
     var response = await http.post(
-      Uri.encodeFull("http://192.168.1.71:8888/course"),
+      Uri.encodeFull("http://10.188.105.219:8888/course"),
       headers: headers,
       body: cadJson
     );
 
     var response2 = await http.get(
-      Uri.encodeFull("http://192.168.1.71:8888/course"),
+      Uri.encodeFull("http://10.188.105.219:8888/course"),
       headers: {"Accept":"application/json"}
     );
 

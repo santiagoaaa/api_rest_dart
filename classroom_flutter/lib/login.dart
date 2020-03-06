@@ -1,7 +1,5 @@
 import 'package:classroom_flutter/MisPreferencias.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget{
   @override
@@ -37,15 +35,6 @@ class LoginState extends State<Login> {
       Future<int> validateUser() async{
       var usr = txtUserController.text;
       var pwd = txtPwdController.text;
-      
-      http.Response response = await http
-      .get(
-        Uri.encodeFull("http://192.168.1.71:8888/users/$usr/$pwd"),
-        headers: { "Accept" : "application/json"}
-      );
-
-      //var token = response.body; // Obtener el token de la peticion o el error
-      return response.statusCode;
     }
 
     final logo = Hero(
@@ -102,40 +91,8 @@ class LoginState extends State<Login> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          //Navigator.pushReplacementNamed(context, '/dash');
-          
-          var codigo = await validateUser();
-          //print(codigo);
-          if( codigo == 200 ){
-            //Navigator.push(context, MaterialPageRoute(builder:(context)=>Dashboard()));
-            _misPreferencias.commit();
+          _misPreferencias.commit();
             Navigator.pushReplacementNamed(context, '/dash');
-
-          }else{
-            //insCheckValue();
-            print("entra a else de login");
-            print(_misPreferencias.estatus);
-            _misPreferencias.commit();
-            Navigator.pushReplacementNamed(context, '/dash');
-             /*
-            showDialog(
-              context: context,
-              builder: (BuildContext context){
-                return AlertDialog(
-                  title: Text("Mensaje de la APP"),
-                  content: Text("Error al Autenticarse"),
-                  actions: <Widget>[
-                    new FlatButton(
-                      child: Text("Cerrar"),
-                      onPressed: (){
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                );
-              }
-            );*/
-          }
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlue,

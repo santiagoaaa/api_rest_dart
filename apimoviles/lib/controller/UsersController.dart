@@ -4,7 +4,8 @@ import 'package:apimoviles/model/Users.dart';
 class UsersController extends ResourceController {
 
   final ManagedContext context;
-  UsersController (this.context);
+  final AuthServer authServer;
+  UsersController (this.context, this.authServer);
 
 //Esto es un select *
   @Operation.get()
@@ -20,13 +21,28 @@ class UsersController extends ResourceController {
     final restUsers = await UsersQuery.fetch();
     return Response.ok(restUsers);
   }
-
+/*
   @Operation.post()
   Future <Response> insUsuario() async{
     final objUsuario = Users()..read(await request.body.decode());
     final query = Query<Users>(context)..values=objUsuario;
     final insUsuario = await query.insert();
     return Response.ok(insUsuario);
+  }
+*/
+  @Operation.post()
+  Future<Response> insUsers(@Bind.body() Users user) async {
+    // Check for required parameters before we spend time hashing
+    if (user.username == null || user.password == null) {
+      return Response.badRequest(
+        body: {"error": "username and password required."});
+    }
+
+    user
+      ..salt = AuthUtility.generateRandomSalt()
+      ..hashedPassword = authServer.hashPassword(user.password, user.salt);
+
+    return Response.ok(await Query(context, values: user).insert());
   }
 
   @Operation.put('idUsuario')
