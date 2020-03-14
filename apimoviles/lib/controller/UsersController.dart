@@ -15,12 +15,27 @@ class UsersController extends ResourceController {
     return Response.ok(resUsers);
   }
 
+  @Operation.get('idUser','password')
+    Future<Response> loginUser(@Bind.path('idUser') String usuario,
+    @Bind.path('password') String pwd ) async {
+
+    String token = "";
+    try {
+      final autenticado = await authServer.authenticate(usuario, pwd, "com.classroom.flutter","");
+      token = autenticado.accessToken;
+      return Response.ok(token);
+    } catch (e) {
+    return Response.forbidden(body: {"error": "las credenciales no son validas"});
+    }
+  }
+/*
   @Operation.get('idUsuario')
   Future <Response> getUsuarioById (@Bind.path('idUsuario') int idUs) async {
     final UsersQuery = Query<Users>(context)..where((a)=>a.id).equalTo(idUs);
     final restUsers = await UsersQuery.fetch();
     return Response.ok(restUsers);
   }
+*/
 /*
   @Operation.post()
   Future <Response> insUsuario() async{

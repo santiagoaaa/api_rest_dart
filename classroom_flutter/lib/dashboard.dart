@@ -58,6 +58,7 @@ class DashboardState extends State<Dashboard>{
                 onTap: (){
                   print("Cerrando sesion...");
                   _misPreferencias.estatus = false;
+                  _misPreferencias.token="";
                   _misPreferencias.commit();
                 },
               ),

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:classroom_flutter/MisPreferencias.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget{
   @override
@@ -7,7 +10,6 @@ class Login extends StatefulWidget{
     // TODO: implement createState
     return LoginState();
   }
-
 }
 
 
@@ -31,11 +33,25 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    var host = "192.168.1.75";//ip del servidor de aqueduct
+    var token;
     // TODO: implement build
       Future<int> validateUser() async{
-      var usr = txtUserController.text;
-      var pwd = txtPwdController.text;
-    }
+        var usr = txtUserController.text;
+        var pwd = txtPwdController.text;
+
+        print("user $usr pwd $pwd");
+
+        http.Response response = await http.get(
+            Uri.encodeFull("http://$host:8888/user/$usr/$pwd"),
+            headers: { "Accept" : "application/json"}
+        );
+
+        token = jsonDecode(response.body); // Obtener el token de la peticion o el error
+
+        return response.statusCode;
+
+      }
 
     final logo = Hero(
       tag: 'hero',
@@ -91,8 +107,34 @@ class LoginState extends State<Login> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          _misPreferencias.commit();
+          var codigo =  await validateUser();
+
+          if (codigo == 200){
+            _misPreferencias.token = token;
+            print("Token guardado en misPreferencias");
+            print(_misPreferencias.token);
+            _misPreferencias.commit();
+            token = null;
             Navigator.pushReplacementNamed(context, '/dash');
+          }else{
+            showDialog(context: context,
+              builder: (BuildContext context){
+                return AlertDialog(
+                  title: Text("Mensaje de la APP"),
+                  content: Text("Error al Autenticarse"),
+                  actions: <Widget>[
+                    new FlatButton(
+                      child: Text("Cerrar"),
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                );
+              }
+            );
+          }
+
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlue,

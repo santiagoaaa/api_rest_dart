@@ -30,7 +30,7 @@ class ApimovilesChannel extends ApplicationChannel {
     logger.onRecord.listen((rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
 
     final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
-    final persistenStore = PostgreSQLPersistentStore.fromConnectionInfo("postgres", "admin", "172.20.5.46", 5432, "classroom_moviles");//ip del servidor
+    final persistenStore = PostgreSQLPersistentStore.fromConnectionInfo("postgres", "admin", "192.168.1.76", 5432, "classroom_moviles");//ip del servidor
     context = ManagedContext(dataModel,persistenStore);
 
     final authStorage = ManagedAuthDelegate<Users>(context);
@@ -50,15 +50,18 @@ class ApimovilesChannel extends ApplicationChannel {
     // Prefer to use `link` instead of `linkFunction`.
     // See: https://aqueduct.io/docs/http/request_controller/
 
-       router.route("/usertype[/:idTipoUsuario]").link( () => UserTypeController(context) );
-       router.route("/users[/:idUsuario]").link( () => UsersController(context, authServer) );
-       router.route("/shedule[/:idPrograma]").link( () => ScheduleController(context) );
-       router.route("/delivery[/:idEnvio]").link( () => DeliveryController(context) );
-       router.route("/course[/:idCurso]").link( () => CourseController(context) );
-       router.route("/commentadv[/:idComentarioAnuncio]").link( () => CommentAdvertisementController(context) );
-       router.route("/commentact[/:idComentarioActividad]").link( () => CommentActivityController(context) );
-       router.route("/advertisement[/:idAnuncio]").link( () => AdvertisementController(context) );
-       router.route("/activities[/:idActividad]").link( () => ActivitiesController(context) );
+       router.route("/usertype[/:idTipoUsuario]").link(() => Authorizer.bearer(authServer)).link( () => UserTypeController(context) );
+       router.route("/users[/:idUsuario]").link(() => Authorizer.bearer(authServer)).link( () => UsersController(context, authServer) );
+
+       router.route("/user[/:idUser/:password]").link(()=>UsersController(context,authServer));
+
+       router.route("/shedule[/:idPrograma]").link(() => Authorizer.bearer(authServer)).link( () => ScheduleController(context) );
+       router.route("/delivery[/:idEnvio]").link(() => Authorizer.bearer(authServer)).link( () => DeliveryController(context) );
+       router.route("/course[/:idCurso]").link(() => Authorizer.bearer(authServer)).link( () => CourseController(context) );
+       router.route("/commentadv[/:idComentarioAnuncio]").link(() => Authorizer.bearer(authServer)).link( () => CommentAdvertisementController(context) );
+       router.route("/commentact[/:idComentarioActividad]").link(() => Authorizer.bearer(authServer)).link( () => CommentActivityController(context) );
+       router.route("/advertisement[/:idAnuncio]").link(() => Authorizer.bearer(authServer)).link( () => AdvertisementController(context) );
+       router.route("/activities[/:idActividad]").link(() => Authorizer.bearer(authServer)).link( () => ActivitiesController(context) );
 
     return router;
   }

@@ -4,9 +4,11 @@ class MisPreferencias {
 
   //CLAVES
   static const LLAVE = "chkEstatus";
+  static const LLAVE2 = "token";
   //Campos a manejar
   SharedPreferences _sharedPreferences;//esta clase se encarga de leer y guardar configuraciones
   bool estatus = false;
+  String token = "";
   MisPreferencias.internal(){}
   factory MisPreferencias()=>instancia;
   //Lee las configuraciones
@@ -16,9 +18,11 @@ class MisPreferencias {
     } else {
       _sharedPreferences = await SharedPreferences.getInstance();
       estatus = _sharedPreferences.getBool(LLAVE);//lee la LLAVE llamada chkEstatus
+      token = _sharedPreferences.getString(LLAVE2);
       //si no encuentra una LLAVE, regresa estatus = null, entonces arreglamos eso asi...
       if (estatus==null) {
         estatus = false;
+        token = "";
       }
       return _sharedPreferences;
     }
@@ -26,6 +30,7 @@ class MisPreferencias {
   //Escribe las configuraciones
   Future <bool> commit ()async{
     await _sharedPreferences.setBool(LLAVE, estatus);
+    await _sharedPreferences.setString(LLAVE2, token);
   }
   //incia todo
   Future <MisPreferencias> init () async{
